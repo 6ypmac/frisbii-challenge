@@ -4,20 +4,20 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { environment } from '../../../environments/environment';
-import { Customer, CustomerList } from '../../models/customer.model';
+import { Invoice, InvoiceList } from '../../models/invoice.model';
 
-const DEFAULT_CUSTOMERS_PAGE_SIZE = 20;
+const DEFAULT_INVOICES_PAGE_SIZE = 20;
 
 @Injectable({
   providedIn: 'root'
 })
-export class CustomersService {
+export class InvoicesService {
 
   private readonly http = inject(HttpClient);
 
-  getCustomers(size: number = DEFAULT_CUSTOMERS_PAGE_SIZE): Observable<Customer[]> {
+  getInvoices(size: number = DEFAULT_INVOICES_PAGE_SIZE): Observable<Invoice[]> {
     return this.http
-      .get<CustomerList>(`${environment.apiUrl}/v1/list/customer`, {
+      .get<InvoiceList>(`${environment.apiUrl}/v1/list/invoice`, {
         params: { size }
       })
       .pipe(
