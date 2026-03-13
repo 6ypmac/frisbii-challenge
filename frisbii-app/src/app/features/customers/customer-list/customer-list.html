@@ -1,1 +1,15 @@
-<p>customer-list works!</p>
+<h2>Customers</h2>
+
+@if (store.loading()) {
+  <p>Loading customers...</p>
+} @else {
+  @if (store.error()) {
+    <p>{{ store.error() }}</p>
+  } @else {
+    <ul>
+      @for (customer of store.customers(); track customer.handle) {
+        <li>{{ customer.handle }} — {{ customer.email }}</li>
+      }
+    </ul>
+  }
+}

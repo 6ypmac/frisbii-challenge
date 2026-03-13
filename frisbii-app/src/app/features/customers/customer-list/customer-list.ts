@@ -1,9 +1,17 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+
+import { CustomersStore } from '../customers.store';
 
 @Component({
   selector: 'app-customer-list',
-  imports: [],
+  standalone: true,
   templateUrl: './customer-list.html',
   styleUrl: './customer-list.scss',
 })
-export class CustomerList {}
+export class CustomerListComponent {
+  readonly store = inject(CustomersStore);
+
+  constructor() {
+    this.store.loadCustomers();
+  }
+}
