@@ -1,9 +1,11 @@
-import { Component, inject, effect } from '@angular/core';
+import { Component, effect, inject, untracked } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs/operators';
 
+import { CustomersStore } from '../customers.store';
 import { InvoicesStore } from '../../invoices/invoices.store';
+import { SubscriptionsStore } from '../../subscriptions/subscriptions.store';
 
 @Component({
   selector: 'app-customer-detail',
@@ -13,9 +15,10 @@ import { InvoicesStore } from '../../invoices/invoices.store';
 })
 export class CustomerDetailComponent {
   private readonly route = inject(ActivatedRoute);
-  private readonly invoicesStore = inject(InvoicesStore);
 
-  readonly store = this.invoicesStore;
+  readonly customers = inject(CustomersStore);
+  readonly invoices = inject(InvoicesStore);
+  readonly subscriptions = inject(SubscriptionsStore);
 
   readonly customerHandle = toSignal(
     this.route.paramMap.pipe(map((params) => params.get('handle')!)),
@@ -26,9 +29,15 @@ export class CustomerDetailComponent {
     effect(() => {
       const handle = this.customerHandle();
 
-      if (handle) {
-        this.invoicesStore.loadInvoices(handle);
+      if (!handle) {
+        return;
       }
+
+      untracked(() => {
+        this.customers.loadCustomer(handle);
+        this.invoices.loadInvoices(handle);
+        this.subscriptions.loadSubscriptions(handle);
+      });
     });
   }
 }
