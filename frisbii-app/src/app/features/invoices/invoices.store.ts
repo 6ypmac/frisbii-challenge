@@ -13,11 +13,12 @@ export class InvoicesStore {
   readonly error = signal<string | null>(null);
 
   loadInvoices(customerHandle: string): void {
+    this.invoices.set([]);
     this.loading.set(true);
     this.error.set(null);
 
     this.invoicesService.getInvoicesByCustomer(customerHandle).subscribe({
-      next: (invoices: Invoice[]) => {
+      next: (invoices) => {
         this.invoices.set(invoices);
         this.loading.set(false);
       },
