@@ -1,5 +1,15 @@
-<h2>Customer detail</h2>
+<h2>Customer {{ customerHandle() }}</h2>
 
-@if (handle()) {
-  <p>Customer handle: {{ handle() }}</p>
+@if (store.loading()) {
+  <p>Loading invoices...</p>
+} @else {
+  @if (store.error()) {
+    <p>{{ store.error() }}</p>
+  } @else {
+    <ul>
+      @for (invoice of store.invoices(); track invoice.handle) {
+        <li>{{ invoice.handle }} — {{ invoice.amount }}</li>
+      }
+    </ul>
+  }
 }

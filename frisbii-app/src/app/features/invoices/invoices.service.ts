@@ -14,10 +14,16 @@ const DEFAULT_INVOICES_PAGE_SIZE = 20;
 export class InvoicesService {
   private readonly http = inject(HttpClient);
 
-  getInvoices(size: number = DEFAULT_INVOICES_PAGE_SIZE): Observable<Invoice[]> {
+  getInvoicesByCustomer(
+    customerHandle: string,
+    size: number = DEFAULT_INVOICES_PAGE_SIZE,
+  ): Observable<Invoice[]> {
     return this.http
       .get<InvoiceList>(`${environment.apiUrl}/list/invoice`, {
-        params: { size },
+        params: {
+          customer: customerHandle,
+          size,
+        },
       })
       .pipe(map((response) => response.content));
   }
