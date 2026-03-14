@@ -14,11 +14,29 @@ const DEFAULT_SUBSCRIPTIONS_PAGE_SIZE = 20;
 export class SubscriptionsService {
   private readonly http = inject(HttpClient);
 
-  getSubscriptions(size: number = DEFAULT_SUBSCRIPTIONS_PAGE_SIZE): Observable<Subscription[]> {
+  getSubscriptionsByCustomer(
+    customerHandle: string,
+    size: number = DEFAULT_SUBSCRIPTIONS_PAGE_SIZE,
+  ): Observable<Subscription[]> {
     return this.http
       .get<SubscriptionList>(`${environment.apiUrl}/list/subscription`, {
-        params: { size },
+        params: {
+          customer: customerHandle,
+          size,
+        },
       })
       .pipe(map((response) => response.content));
+  }
+
+  pauseSubscription(subscriptionHandle: string): Observable<void> {
+    return this.http
+      .post<unknown>(`${environment.apiUrl}/subscription/${subscriptionHandle}/on_hold`, {})
+      .pipe(map(() => undefined));
+  }
+
+  unpauseSubscription(subscriptionHandle: string): Observable<void> {
+    return this.http
+      .post<unknown>(`${environment.apiUrl}/subscription/${subscriptionHandle}/reactivate`, {})
+      .pipe(map(() => undefined));
   }
 }

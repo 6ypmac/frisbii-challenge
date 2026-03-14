@@ -21,4 +21,8 @@ export class CustomersService {
       })
       .pipe(map((response) => response.content));
   }
+
+  getCustomer(customerHandle: string): Observable<Customer> {
+    return this.http.get<Customer>(`${environment.apiUrl}/customer/${customerHandle}`);
+  }
 }
