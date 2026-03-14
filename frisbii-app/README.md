@@ -1,59 +1,212 @@
-# FrisbiiApp
+# Frisbii Customer Management App
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.2.
+This project implements a small customer dashboard that allows viewing customers, their invoices, and subscriptions.
 
-## Development server
+The application is built with **Angular**, using **Signals-based state management** and **standalone components**.
 
-To start a local development server, run:
+---
 
-```bash
-ng serve
+## Features
+
+### Customers List
+
+Displays a list of customers including:
+
+- customer handle
+- email address
+
+Each customer links to a detailed customer page.
+
+---
+
+### Customer Details
+
+Displays detailed information about the selected customer:
+
+- full name
+- email
+- company
+- creation date
+
+---
+
+### Invoices
+
+Shows invoices belonging to the selected customer.
+
+Displayed fields:
+
+- invoice handle
+- state
+- amount
+- currency
+- creation date
+
+---
+
+### Subscriptions
+
+Shows subscriptions belonging to the selected customer.
+
+Displayed fields:
+
+- subscription handle
+- state
+- plan
+- creation date
+
+Subscriptions can be:
+
+- paused
+- unpaused
+
+The UI disables the action button while the request is in progress.
+
+---
+
+## Architecture
+
+The project follows a **feature-based architecture**:
+
+```text
+src/app/features
+├─ customers
+├─ invoices
+└─ subscriptions
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Each feature contains:
 
-## Code scaffolding
+- service (API communication)
+- store (state management)
+- UI components
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+The `CustomerDetailComponent` acts as a **composition component**, combining the different feature components.
+
+---
+
+## State Management
+
+State is managed using **Angular Signals**.
+
+Each feature exposes a small store responsible for:
+
+- loading state
+- error handling
+- storing fetched data
+- performing actions
+
+Example stores:
+
+- `CustomersStore`
+- `InvoicesStore`
+- `SubscriptionsStore`
+
+This keeps the components simple and focused on rendering.
+
+---
+
+## Data Loading
+
+Data is fetched using Angular `HttpClient`.
+
+Each store exposes signals such as:
+
+- `loading`
+- `error`
+- data signals
+
+The UI reacts to these signals to render:
+
+- loading states
+- error states
+- empty states
+
+---
+
+## Routing
+
+The application uses Angular Router.
+
+Routes:
 
 ```bash
-ng generate component component-name
+/customers
+/customers/:handle
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+---
+
+## Performance Considerations
+
+The UI uses Angular's modern control flow syntax:
 
 ```bash
-ng generate --help
+@if
+@for
 ```
 
-## Building
-
-To build the project run:
+Lists use `track` to avoid unnecessary re-renders:
 
 ```bash
-ng build
+@for (invoice of invoices(); track invoice.handle)
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+---
 
-## Running unit tests
+## Pagination
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+The API supports pagination via the `size` parameter.
+
+For simplicity, the UI currently loads the first page only.
+
+Example request:
 
 ```bash
-ng test
+/v1/list/invoice?customer=cust-0100&size=20
 ```
 
-## Running end-to-end tests
+---
 
-For end-to-end (e2e) testing, run:
+## Running the Project
+
+Install dependencies:
 
 ```bash
-ng e2e
+npm install
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+Start development server:
 
-## Additional Resources
+```bash
+npm start
+```
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Open the application in the browser:
+
+```bash
+http://localhost:4200
+```
+
+---
+
+## Possible Improvements
+
+Possible future enhancements include:
+
+- full pagination support
+- sorting and filtering
+- improved UI styling
+- global error handling
+
+---
+
+## Technologies
+
+- Angular
+- Angular Signals
+- Angular Standalone Components
+- Angular Router
+- TypeScript
+- RxJS
+- HttpClient

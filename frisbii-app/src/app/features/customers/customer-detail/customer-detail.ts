@@ -1,4 +1,4 @@
-import { Component, effect, inject, untracked } from '@angular/core';
+import { Component, effect, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs/operators';
@@ -37,11 +37,9 @@ export class CustomerDetailComponent {
         return;
       }
 
-      untracked(() => {
-        this.customers.loadCustomer(handle);
-        this.invoices.loadInvoices(handle);
-        this.subscriptions.loadSubscriptions(handle);
-      });
+      this.customers.loadCustomer(handle);
+      this.invoices.loadInvoices(handle);
+      this.subscriptions.loadSubscriptions(handle);
     });
   }
 }
