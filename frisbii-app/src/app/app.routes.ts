@@ -1,3 +1,24 @@
 import { Routes } from '@angular/router';
 
-export const routes: Routes = [];
+import { CustomerListComponent } from './features/customers/customer-list/customer-list';
+import { CustomerDetailComponent } from './features/customers/customer-detail/customer-detail';
+
+export const routes: Routes = [
+  {
+    path: '',
+    redirectTo: 'customers',
+    pathMatch: 'full',
+  },
+  {
+    path: 'customers',
+    component: CustomerListComponent,
+  },
+  {
+    path: 'customers/:handle',
+    component: CustomerDetailComponent,
+  },
+  {
+    path: '**',
+    redirectTo: 'customers',
+  },
+];

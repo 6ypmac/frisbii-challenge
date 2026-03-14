@@ -8,7 +8,11 @@
   } @else {
     <ul>
       @for (customer of store.customers(); track customer.handle) {
-        <li>{{ customer.handle }} — {{ customer.email }}</li>
+        <li>
+          <a [routerLink]="['/customers', customer.handle]">
+            {{ customer.handle }} — {{ customer.email }}
+          </a>
+        </li>
       }
     </ul>
   }

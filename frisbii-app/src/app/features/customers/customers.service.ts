@@ -9,20 +9,16 @@ import { Customer, CustomerList } from '../../models/customer.model';
 const DEFAULT_CUSTOMERS_PAGE_SIZE = 20;
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CustomersService {
-
   private readonly http = inject(HttpClient);
 
   getCustomers(size: number = DEFAULT_CUSTOMERS_PAGE_SIZE): Observable<Customer[]> {
     return this.http
-      .get<CustomerList>(`${environment.apiUrl}/v1/list/customer`, {
-        params: { size }
+      .get<CustomerList>(`${environment.apiUrl}/list/customer`, {
+        params: { size },
       })
-      .pipe(
-        map(response => response.content)
-      );
+      .pipe(map((response) => response.content));
   }
-
 }
