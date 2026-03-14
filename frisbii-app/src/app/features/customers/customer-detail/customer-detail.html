@@ -1,4 +1,4 @@
-<h2>Customer {{ customerHandle() }}</h2>
+<h2>Customer {{ customers.fullName() || customerHandle() }}</h2>
 
 @if (customers.loading()) {
   <p>Loading customer...</p>
@@ -13,73 +13,16 @@
         <p><strong>Name:</strong> {{ customers.fullName() }}</p>
         <p><strong>Email:</strong> {{ customerData.email }}</p>
         <p><strong>Company:</strong> {{ customerData.company }}</p>
-        <p><strong>Created:</strong> {{ customerData.created }}</p>
+        <p><strong>Created:</strong> {{ customerData.created | date: 'medium' }}</p>
       </section>
     }
   }
 }
 
 <section>
-  <h3>Invoices</h3>
-
-  @if (invoices.loading()) {
-    <p>Loading invoices...</p>
-  } @else {
-    @if (invoices.error()) {
-      <p>{{ invoices.error() }}</p>
-    } @else if (invoices.invoices().length === 0) {
-      <p>No invoices found</p>
-    } @else {
-      <ul>
-        @for (invoice of invoices.invoices(); track invoice.handle) {
-          <li>
-            {{ invoice.handle }}
-            — {{ invoice.state }} — {{ invoice.amount }} {{ invoice.currency }} —
-            {{ invoice.created }}
-          </li>
-        }
-      </ul>
-    }
-  }
+  <app-invoice-list></app-invoice-list>
 </section>
 
 <section>
-  <h3>Subscriptions</h3>
-
-  @if (subscriptions.loading()) {
-    <p>Loading subscriptions...</p>
-  } @else {
-    @if (subscriptions.error()) {
-      <p>{{ subscriptions.error() }}</p>
-    } @else if (subscriptions.subscriptions().length === 0) {
-      <p>No subscriptions found</p>
-    } @else {
-      <ul>
-        @for (subscription of subscriptions.subscriptions(); track subscription.handle) {
-          <li>
-            {{ subscription.handle }}
-            — {{ subscription.state }} — {{ subscription.plan }} — {{ subscription.created }}
-
-            @if (subscription.state === 'active') {
-              <button
-                (click)="subscriptions.pauseSubscription(subscription.handle)"
-                [disabled]="subscriptions.actionHandle() === subscription.handle"
-              >
-                Pause
-              </button>
-            }
-
-            @if (subscription.state === 'on_hold') {
-              <button
-                (click)="subscriptions.unpauseSubscription(subscription.handle)"
-                [disabled]="subscriptions.actionHandle() === subscription.handle"
-              >
-                Unpause
-              </button>
-            }
-          </li>
-        }
-      </ul>
-    }
-  }
+  <app-subscription-list></app-subscription-list>
 </section>

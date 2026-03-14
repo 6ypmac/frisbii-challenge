@@ -2,14 +2,18 @@ import { Component, effect, inject, untracked } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs/operators';
+import { DatePipe } from '@angular/common';
 
 import { CustomersStore } from '../customers.store';
 import { InvoicesStore } from '../../invoices/invoices.store';
 import { SubscriptionsStore } from '../../subscriptions/subscriptions.store';
+import { InvoiceListComponent } from '../../invoices/invoice-list/invoice-list';
+import { SubscriptionListComponent } from '../../subscriptions/subscription-list/subscription-list';
 
 @Component({
   selector: 'app-customer-detail',
   standalone: true,
+  imports: [DatePipe, InvoiceListComponent, SubscriptionListComponent],
   templateUrl: './customer-detail.html',
   styleUrl: './customer-detail.scss',
 })

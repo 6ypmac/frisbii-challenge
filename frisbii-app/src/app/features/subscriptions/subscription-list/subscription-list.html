@@ -1,1 +1,39 @@
-<p>subscription-list works!</p>
+<h3>Subscriptions</h3>
+
+@if (subscriptions.loading()) {
+  <p>Loading subscriptions...</p>
+} @else {
+  @if (subscriptions.error()) {
+    <p>{{ subscriptions.error() }}</p>
+  } @else if (subscriptions.subscriptions().length === 0) {
+    <p>No subscriptions found</p>
+  } @else {
+    <ul>
+      @for (subscription of subscriptions.subscriptions(); track subscription.handle) {
+        <li>
+          {{ subscription.handle }}
+          — {{ subscription.state }} — {{ subscription.plan }} —
+          {{ subscription.created | date: 'medium' }}
+
+          @if (subscription.state === 'active') {
+            <button
+              (click)="subscriptions.pauseSubscription(subscription.handle)"
+              [disabled]="subscriptions.actionHandle() === subscription.handle"
+            >
+              Pause
+            </button>
+          }
+
+          @if (subscription.state === 'on_hold') {
+            <button
+              (click)="subscriptions.unpauseSubscription(subscription.handle)"
+              [disabled]="subscriptions.actionHandle() === subscription.handle"
+            >
+              Unpause
+            </button>
+          }
+        </li>
+      }
+    </ul>
+  }
+}

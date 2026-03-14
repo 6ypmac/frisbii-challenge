@@ -1,9 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { DatePipe } from '@angular/common';
+
+import { SubscriptionsStore } from '../subscriptions.store';
 
 @Component({
   selector: 'app-subscription-list',
-  imports: [],
+  standalone: true,
+  imports: [DatePipe],
   templateUrl: './subscription-list.html',
   styleUrl: './subscription-list.scss',
 })
-export class SubscriptionList {}
+export class SubscriptionListComponent {
+  readonly subscriptions = inject(SubscriptionsStore);
+}

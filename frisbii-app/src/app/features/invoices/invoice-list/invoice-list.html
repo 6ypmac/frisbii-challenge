@@ -1,1 +1,21 @@
-<p>invoice-list works!</p>
+<h3>Invoices</h3>
+
+@if (invoices.loading()) {
+  <p>Loading invoices...</p>
+} @else {
+  @if (invoices.error()) {
+    <p>{{ invoices.error() }}</p>
+  } @else if (invoices.invoices().length === 0) {
+    <p>No invoices found</p>
+  } @else {
+    <ul>
+      @for (invoice of invoices.invoices(); track invoice.handle) {
+        <li>
+          {{ invoice.handle }}
+          — {{ invoice.state }} — {{ invoice.amount | number: '1.2-2' }} {{ invoice.currency }} —
+          {{ invoice.created | date: 'medium' }}
+        </li>
+      }
+    </ul>
+  }
+}
